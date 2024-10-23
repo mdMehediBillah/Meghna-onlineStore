@@ -1,32 +1,35 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import mongoose from "mongoose";
-import "./database/index.js";
+import "./database/index.js"; // Ensure this path correctly points to your database connection file
 
-// import Routers
-// import userRouter from "./routers/users/index.js";
+// Import Routers
+import productRouter from "./routes/productRoutes.js";
+import categoriesRouter from "./routes/categoriesRouter.js";
 
-const app = express();
 dotenv.config();
 
+const app = express();
+
+// Middleware
 app.use(cors({ origin: "*" }));
+app.use(express.json()); // Parse JSON request bodies
 
-// for database connection json file
-app.use(express.json());
+// Routes
+app.use("/api/v1/products", productRouter);
+app.use("/api/v1/categories", categoriesRouter);
 
-// routes
-// app.use("/api/v1/users", userRouter);
-
-// testing routes
+// Testing route
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+// Catch-all route for invalid endpoints
 app.get("/*", (req, res) => {
-  res.send("Wrong url");
+  res.status(404).send("Wrong URL");
 });
 
-// app listening port
+// App listening port
 const PORT = process.env.PORT || 8090;
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);

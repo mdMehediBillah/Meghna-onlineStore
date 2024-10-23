@@ -7,7 +7,6 @@ const categorySchema = new Schema(
     name: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
     },
     description: {
@@ -36,17 +35,6 @@ const categorySchema = new Schema(
   }
 );
 
-// Middleware to update updatedAt field before saving
-categorySchema.pre("save", function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
-
-// Middleware to handle updates
-categorySchema.pre("findOneAndUpdate", function (next) {
-  this._update.updatedAt = Date.now();
-  next();
-});
-
 // Export the model
-module.exports = mongoose.model("Category", categorySchema);
+const Category = mongoose.model("Category", categorySchema);
+export default Category;
